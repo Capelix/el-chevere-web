@@ -16,6 +16,8 @@
   "CONTACT_TXT_6": "*Contact us directly by email if you prefer.",
   "OR": "or",
   "NAME": "Name",
+  "AND": "&",
+  "LAST_NAME": "Last name",
   "EMAIL": "Email",
   "MESSAGE": "Message",
   "PHONE": "Phone",

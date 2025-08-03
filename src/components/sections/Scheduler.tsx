@@ -147,7 +147,7 @@ export const Scheduler = ({ currentLocale }: { currentLocale?: string }) => {
 				<div className='flex w-full flex-col gap-4 sm:flex-row sm:gap-8'>
 					<div className='flex flex-1 flex-col gap-4'>
 						<label className='inline-flex flex-col text-slate-400'>
-							{i18n.NAME}*
+							{i18n.NAME} {i18n.AND} {i18n.LAST_NAME}*
 							<input
 								required
 								type='text'
