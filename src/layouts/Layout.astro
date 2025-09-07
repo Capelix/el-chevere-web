@@ -14,6 +14,7 @@ import Star from '@/icons/Star.astro'
 import type { Preload } from '@/interfaces/preload'
 import { getI18N } from '@/languages/index'
 import '@fontsource-variable/onest'
+import Analytics from '@vercel/analytics/astro'
 import { ClientRouter } from 'astro:transitions'
 
 interface Props {
@@ -42,6 +43,7 @@ const i18n = getI18N({ currentLocale })
 			title={title}
 		/>
 
+		<Analytics />
 		<ClientRouter />
 	</head>
 	<body class='relative overflow-x-hidden'>

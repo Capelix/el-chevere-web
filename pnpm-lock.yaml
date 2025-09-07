@@ -32,6 +32,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.0.3
         version: 19.0.3(@types/react@19.0.7)
+      '@vercel/analytics':
+        specifier: ^1.5.0
+        version: 1.5.0(react@19.0.0)
       astro:
         specifier: ^5.1.6
         version: 5.1.6(@types/node@22.13.10)(jiti@1.21.7)(rollup@4.30.1)(typescript@5.7.3)(yaml@2.7.0)
@@ -1212,8 +1215,8 @@ packages:
   '@ungap/structured-clone@1.2.1':
     resolution: {integrity: sha512-fEzPV3hSkSMltkw152tJKNARhOupqbH96MZWyRjNaYZOMIzbrTeQDG+MTc6Mr2pgzFQzFxAfmhGDNP5QK++2ZA==}
 
-  '@vercel/analytics@1.4.1':
-    resolution: {integrity: sha512-ekpL4ReX2TH3LnrRZTUKjHHNpNy9S1I7QmS+g/RQXoSUQ8ienzosuX7T9djZ/s8zPhBx1mpHP/Rw5875N+zQIQ==}
+  '@vercel/analytics@1.5.0':
+    resolution: {integrity: sha512-MYsBzfPki4gthY5HnYN7jgInhAZ7Ac1cYDoRWFomwGHWEX7odTEzbtg9kf/QSo7XEsEAqlQugA6gJ2WS2DEa3g==}
     peerDependencies:
       '@remix-run/react': ^2
       '@sveltejs/kit': ^1 || ^2
@@ -3764,7 +3767,7 @@ snapshots:
   '@astrojs/vercel@8.1.0(astro@5.1.6(@types/node@22.13.10)(jiti@1.21.7)(rollup@4.30.1)(typescript@5.7.3)(yaml@2.7.0))(react@19.0.0)(rollup@4.30.1)':
     dependencies:
       '@astrojs/internal-helpers': 0.6.0
-      '@vercel/analytics': 1.4.1(react@19.0.0)
+      '@vercel/analytics': 1.5.0(react@19.0.0)
       '@vercel/edge': 1.2.1
       '@vercel/nft': 0.29.2(rollup@4.30.1)
       '@vercel/routing-utils': 5.0.4
@@ -4692,7 +4695,7 @@ snapshots:
 
   '@ungap/structured-clone@1.2.1': {}
 
-  '@vercel/analytics@1.4.1(react@19.0.0)':
+  '@vercel/analytics@1.5.0(react@19.0.0)':
     optionalDependencies:
       react: 19.0.0
 
