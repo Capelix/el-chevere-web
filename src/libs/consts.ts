@@ -32,12 +32,12 @@ export const navItemsProvider = (currentLocale: string | undefined): NavItem[] =
 			url: '/',
 			icon: Home,
 		},
-		{
-			title: i18n.DATES,
-			label: 'dates',
-			url: '/schedule',
-			icon: DateIcon,
-		},
+		// {
+		// 	title: i18n.DATES,
+		// 	label: 'dates',
+		// 	url: '/schedule',
+		// 	icon: DateIcon,
+		// },
 		{
 			title: i18n.PORTFOLIO,
 			label: 'portfolio',
