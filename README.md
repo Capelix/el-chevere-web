@@ -1,7 +1,7 @@
 # → Photo Studio El Chevere's Web ←
 
 <a href="https://github.com/RikiRilis/el-chevere-web">
-  <img src="https://ynbjmptmmmbaspzfxzdu.supabase.co/storage/v1/object/sign/el-chevere-web/statics/page-presentation.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJlbC1jaGV2ZXJlLXdlYi9zdGF0aWNzL3BhZ2UtcHJlc2VudGF0aW9uLmF2aWYiLCJpYXQiOjE3NDEyMjcwNjAsImV4cCI6MzMyNDU2OTEwNjB9.6jqEWgnSG7TWmQtwFsdj6NDmpuh17Gv0gTGUVuxbVlQ" alt="Photo Studio El Chevere's web embedded image" />
+  <img src="https://capelix.dev/images/page-presentation.webp" alt="Photo Studio El Chevere's web embedded image" />
 </a>
 
 [Visit it →](https://fotoestudioelchevere.com)

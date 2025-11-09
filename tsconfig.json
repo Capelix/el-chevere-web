@@ -27,8 +27,8 @@
       "@/interfaces": [
         "src/interfaces/*"
       ],
-      "@/languages": [
-        "src/languages/*"
+      "@/locales": [
+        "src/locales/*"
       ],
       "@/db": [
         "src/db/*"

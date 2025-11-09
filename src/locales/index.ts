@@ -1,5 +1,5 @@
-import english from '@/languages/en.json'
-import spanish from '@/languages/es.json'
+import english from '@/locales/en.json'
+import spanish from '@/locales/es.json'
 
 const LANG = {
 	ENGLISH: 'en',

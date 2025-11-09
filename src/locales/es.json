@@ -19,6 +19,7 @@
   "AND": "y",
   "LAST_NAME": "Apellido",
   "EMAIL": "Correo",
+  "TITLE": "Título",
   "MESSAGE": "Mensaje",
   "PHONE": "Teléfono",
   "DATE": "Fecha",
@@ -181,5 +182,10 @@
   "FAQ_Q_6": "¿Qué pasa si quiero hacerme una sesión de fotos en un parque retirado del estudio?",
   "FAQ_QA_8": "Nosotros también nos dedicamos a las fotos en exteriores (fuera del estudio) como bodas, bautizos, quinceañeras, retratos al exterior y demás estilos.",
   "FAQ_Q_7": "¿Me pueden enviar todas las tomas sin editar?",
-  "FAQ_QA_9": "No, no enviamos las tomas sin editar. Solo enviamos las fotos editadas y seleccionadas por el cliente. Las tomas sin editar son descartadas después de un tiempo, o, si así el cliente lo desea, se le pueden guardar las fotos para una futura selección."
+  "FAQ_QA_9": "No, no enviamos las tomas sin editar. Solo enviamos las fotos editadas y seleccionadas por el cliente. Las tomas sin editar son descartadas después de un tiempo, o, si así el cliente lo desea, se le pueden guardar las fotos para una futura selección.",
+  "SELECT_DATE": "Seleccionar una fecha",
+  "SUNDAYS_NOT_AVAILABLE": "Los domingos no están disponibles",
+  "LOADING_AVAILABLE_TIMES": "Cargando horarios disponibles...",
+  "NO_AVAILABLE_TIMES": "No hay horarios disponibles para esta fecha",
+  "SELECT_TIME": "Seleccionar una hora"
 }

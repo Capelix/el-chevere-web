@@ -19,6 +19,7 @@
   "AND": "&",
   "LAST_NAME": "Last name",
   "EMAIL": "Email",
+  "TITLE": "Title",
   "MESSAGE": "Message",
   "PHONE": "Phone",
   "DATE": "Date",
@@ -177,5 +178,10 @@
   "FAQ_Q_6": "What if I want to have a photo shoot in a park far from the studio?",
   "FAQ_QA_8": "We also specialize in outdoor photos (outside the studio) such as weddings, baptisms, 15 years old birthdays, outdoor portraits and other styles.",
   "FAQ_Q_7": "Can you send me all the unedited shots?",
-  "FAQ_QA_9": "No, we don't send unedited shots. We only send photos edited and selected by the client. Unedited shots are discarded after a certain time, or, if the client wishes, the photos can be saved for future selection."
+  "FAQ_QA_9": "No, we don't send unedited shots. We only send photos edited and selected by the client. Unedited shots are discarded after a certain time, or, if the client wishes, the photos can be saved for future selection.",
+  "SELECT_DATE": "Select a date",
+  "SUNDAYS_NOT_AVAILABLE": "Sundays are not available",
+  "LOADING_AVAILABLE_TIMES": "Loading available times...",
+  "NO_AVAILABLE_TIMES": "No available times for this date",
+  "SELECT_TIME": "Select a time"
 }
