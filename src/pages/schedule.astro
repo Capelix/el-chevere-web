@@ -2,8 +2,8 @@
 import SectionContainer from '@/components/SectionContainer.astro'
 import { Scheduler } from '@/components/sections/Scheduler'
 import Date from '@/icons/Date.astro'
-import { getI18N } from '@/languages/index'
 import Layout from '@/layouts/Layout.astro'
+import { getI18N } from '@/locales/index'
 
 const currentLocale = Astro.currentLocale
 const i18n = getI18N({ currentLocale })
@@ -15,9 +15,9 @@ const i18n = getI18N({ currentLocale })
 	description={i18n.PAGE_DESCRIPTION}
 >
 	<SectionContainer>
-		<div class='flex w-full max-w-4xl flex-col md:w-11/12 lg:w-8/12'>
+		<div class='flex w-full max-w-6xl flex-col md:w-11/12 lg:w-10/12'>
 			<h2 class='mb-8 flex items-center gap-x-3 text-3xl font-semibold text-primary sm:text-4xl'>
-				<Date class='size-8' />
+				<Date class='size-8 text-accent' />
 
 				{i18n.DATES}
 			</h2>

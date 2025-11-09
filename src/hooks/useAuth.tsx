@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'preact/hooks'
 import { supabase } from '@/db/supabase'
 import type { User, Session } from '@supabase/supabase-js'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 
 export function useAuth() {
 	const [user, setUser] = useState<User | null>(null)

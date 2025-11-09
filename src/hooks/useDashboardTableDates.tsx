@@ -2,7 +2,7 @@
 import type { Date } from '@/interfaces/date'
 import { useEffect, useMemo, useState } from 'preact/hooks'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 import { currentDate, tomorrowDate } from '@/libs/consts'
 import { DateStatus } from '@/interfaces/dateStatus'
 import type { DashboardTableDatesProps } from '@/interfaces/dashboardTableDatesProps'

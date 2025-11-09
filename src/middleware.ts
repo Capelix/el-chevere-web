@@ -40,7 +40,7 @@ export const onRequest = defineMiddleware(async ({ cookies, redirect, url }, nex
 	}
 
 	// Redirect if already logged in
-	if (pathname === '/auth' && isValidAdmin) {
+	if (pathname === '/admin/login' && isValidAdmin) {
 		return redirect('/admin/dashboard')
 	}
 
@@ -49,7 +49,7 @@ export const onRequest = defineMiddleware(async ({ cookies, redirect, url }, nex
 	const protectedRoutes = ['/admin/dashboard']
 	if (protectedRoutes.some((route) => pathname.startsWith(route))) {
 		if (!isValidAdmin) {
-			return redirect('/auth')
+			return redirect('/admin/login')
 		}
 	}
 

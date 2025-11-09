@@ -8,7 +8,7 @@ import { ImageUpload } from '@/icons/ImageUpload'
 import { Phone } from '@/icons/Phone'
 import { CheckCircle } from '@/icons/CheckCircle'
 import { ErrorCircle } from '@/icons/ErrorCircle'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 import {
 	signInSchema,
 	signUpSchema,

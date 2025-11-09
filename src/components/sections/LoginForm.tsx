@@ -3,7 +3,7 @@ import { Loading } from '@/icons/Loading'
 import { Login } from '@/icons/Login'
 import { PasswordUser } from '@/icons/PasswordUser'
 import { User } from '@/icons/User'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 import { useRef } from 'preact/hooks'
 
 /* eslint-disable react/react-in-jsx-scope */

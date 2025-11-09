@@ -1,5 +1,5 @@
 import type { Category } from '@/interfaces/category'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 import { getImagesWithSize } from '@/libs/getImageSizes'
 
 export const getCategories = (currentLocale?: string): Category[] => {

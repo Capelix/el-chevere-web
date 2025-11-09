@@ -1,7 +1,7 @@
 ---
 import ChatQuestion from '@/icons/ChatQuestion.astro'
 import SemiArrow from '@/icons/SemiArrow.astro'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 import { getFaqs } from '@/services/faqs'
 import MainTitle from '../MainTitle.astro'
 
@@ -25,7 +25,10 @@ const faqs = getFaqs(currentLocale)
 			faqs.slice(0, 7).map((faq, index) => (
 				<li class='group overflow-hidden rounded-2xl border border-accent/10 bg-glass backdrop-blur-md transition-all duration-300 hover:border-accent/20 hover:shadow-lg hover:shadow-accent/10'>
 					<div class='grid grid-rows-[min-content_0fr] transition-[grid-template-rows] duration-300 has-[input:checked]:grid-rows-[min-content_1fr]'>
-						<label for={faq.question} class='relative cursor-pointer select-none p-5 transition-colors duration-300 hover:bg-accent/5'>
+						<label
+							for={faq.question}
+							class='relative cursor-pointer select-none p-5 transition-colors duration-300 hover:bg-accent/5'
+						>
 							<input checked={index === 0} type='checkbox' id={faq.question} class='peer hidden' />
 							<SemiArrow
 								data-accordion-icon

@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 import { useEmailjs } from '@/hooks/useEmailjs'
 import { useRef } from 'preact/hooks'
 import { Loading } from '@/icons/Loading'
@@ -35,7 +35,11 @@ export const SendForm = ({ currentLocale }: { currentLocale?: string }) => {
 	}
 
 	return (
-		<form ref={formRef} onSubmit={handleSubmit} className='rounded-2xl border border-accent/10 bg-glass p-6 backdrop-blur-md shadow-lg'>
+		<form
+			ref={formRef}
+			onSubmit={handleSubmit}
+			className='rounded-2xl border border-accent/10 bg-glass p-6 shadow-lg backdrop-blur-md'
+		>
 			<span className='text-sm font-medium italic text-secondary'>{i18n.CONTACT_TXT_6}</span>
 
 			<div className='mt-4 flex flex-col gap-4'>
@@ -67,7 +71,7 @@ export const SendForm = ({ currentLocale }: { currentLocale?: string }) => {
 					<span className='text-sm font-semibold text-primary'>{i18n.MESSAGE}*</span>
 					<textarea
 						required
-						className='min-h-32 rounded-xl border border-accent/20 bg-back/50 p-4 text-primary outline-none transition-all duration-300 placeholder:text-secondary/50 focus:border-accent/60 focus:bg-back/70 focus:ring-2 focus:ring-accent/20 resize-none'
+						className='min-h-32 resize-none rounded-xl border border-accent/20 bg-back/50 p-4 text-primary outline-none transition-all duration-300 placeholder:text-secondary/50 focus:border-accent/60 focus:bg-back/70 focus:ring-2 focus:ring-accent/20'
 						name='message'
 						placeholder={i18n.MESSAGE_PLACEHOLDER}
 					></textarea>

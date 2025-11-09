@@ -3,12 +3,12 @@
 import { Dashboard } from '@/icons/Dashboard'
 import { Search } from '@/icons/Search'
 import { SemiArrow } from '@/icons/SemiArrow'
-import { useCallback, useState } from 'preact/hooks'
+import { useCallback, useState, useEffect, useRef } from 'preact/hooks'
 import debounce from 'just-debounce-it'
 import { useDashboardTableDates } from '@/hooks/useDashboardTableDates'
 import { useSearch } from '@/hooks/useSearch'
 import { DashboardDataRows } from '@/components/DashboardDataRows'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 import { SortAscendingNumbers } from '@/icons/SortAscendingNumbers'
 import { SortAscending } from '@/icons/SortAscending'
 import { Loading } from '@/icons/Loading'
@@ -32,6 +32,7 @@ export const DashboardDataTable = ({
 	const [isRowInfoOpen, setIsRowInfoOpen] = useState(false)
 	const [rowInfo, setRowInfo] = useState<Date>({ time: '-' } as Date)
 	const { convertMode, convertReason } = useConvert(currentLocale)
+	const dropdownRef = useRef<HTMLDivElement>(null)
 	const {
 		dates,
 		loading,
@@ -165,229 +166,276 @@ export const DashboardDataTable = ({
 		window.location.href = '/api/logout'
 	}
 
+	// Close dropdown when clicking outside
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+				setIsViewOpen(false)
+			}
+		}
+
+		if (isViewOpen) {
+			document.addEventListener('mousedown', handleClickOutside)
+		}
+
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside)
+		}
+	}, [isViewOpen])
+
 	return (
 		<>
+			{/* Modern Modal */}
 			<div
 				id={'row-info-modal'}
 				onClick={handleClickInfoModal}
-				className={`fixed top-0 z-50 ${isRowInfoOpen ? 'flex' : 'invisible'} h-screen w-screen items-center justify-center bg-neutral-950/50`}
+				className={`fixed inset-0 z-50 flex ${isRowInfoOpen ? 'visible' : 'invisible'} h-screen w-screen items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${isRowInfoOpen ? 'opacity-100' : 'opacity-0'}`}
 			>
 				<div
 					onClick={(e) => e.stopPropagation()}
-					className={`flex h-fit w-full max-w-3xl flex-col justify-between gap-x-3 overflow-hidden truncate rounded-lg bg-back p-6 transition-transform duration-300 ease-out ${isRowInfoOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+					className={`relative flex h-fit max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-back via-back to-back/95 p-4 shadow-2xl shadow-black/50 backdrop-blur-xl transition-all duration-300 ease-out sm:p-6 lg:p-8 ${isRowInfoOpen ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-10 scale-95 opacity-0'} mx-4`}
 				>
-					<div className='flex w-full items-center justify-between'>
-						<span className={`inline-flex items-center gap-2 text-xl font-bold text-primary`}>
-							{rowInfo.name}{' '}
-							{rowInfo.status === DateStatus.DONE ? (
-								<span title={i18n.DONE} className='size-3 rounded-full bg-green-500'></span>
-							) : rowInfo.status === DateStatus.PENDING ? (
-								<span title={i18n.PENDING} className='size-3 rounded-full bg-gray-500'></span>
-							) : rowInfo.status === DateStatus.CANCELLED ? (
-								<span title={i18n.CANCELLED} className='size-3 rounded-full bg-red-500'></span>
-							) : rowInfo.status === DateStatus.OVERDUE ? (
-								<span title={i18n.OVERDUE} className='size-3 rounded-full bg-yellow-500'></span>
-							) : (
-								<span title={i18n.CONFIRMED} className='size-3 rounded-full bg-orange-500'></span>
-							)}
-						</span>
+					{/* Header */}
+					<div className='mb-6 flex w-full items-center justify-between border-b border-white/10 pb-4'>
+						<div className='flex items-center gap-3'>
+							<div className='flex items-center gap-2'>
+								<h3 className='text-xl font-bold text-primary sm:text-2xl'>{rowInfo.name}</h3>
+								{rowInfo.status === DateStatus.DONE ? (
+									<span
+										title={i18n.DONE}
+										className='size-3 rounded-full bg-green-500 shadow-lg shadow-green-500/50'
+									></span>
+								) : rowInfo.status === DateStatus.PENDING ? (
+									<span
+										title={i18n.PENDING}
+										className='size-3 rounded-full bg-gray-500 shadow-lg shadow-gray-500/50'
+									></span>
+								) : rowInfo.status === DateStatus.CANCELLED ? (
+									<span
+										title={i18n.CANCELLED}
+										className='size-3 rounded-full bg-red-500 shadow-lg shadow-red-500/50'
+									></span>
+								) : rowInfo.status === DateStatus.OVERDUE ? (
+									<span
+										title={i18n.OVERDUE}
+										className='size-3 rounded-full bg-yellow-500 shadow-lg shadow-yellow-500/50'
+									></span>
+								) : (
+									<span
+										title={i18n.CONFIRMED}
+										className='size-3 rounded-full bg-orange-500 shadow-lg shadow-orange-500/50'
+									></span>
+								)}
+							</div>
+						</div>
 
-						<span
+						<button
 							id={'row-close-modal'}
 							onClick={handleClickInfoModal}
-							className='group flex size-8 cursor-pointer items-center justify-center text-primary transition duration-300 ease-in-out sm:hover:rotate-90 sm:hover:text-main'
+							className='group flex size-10 cursor-pointer items-center justify-center rounded-lg text-primary transition-all duration-200 hover:bg-white/10 hover:text-accent active:scale-95'
+							aria-label='Close modal'
 						>
-							<Close classes='w-full' />
-						</span>
+							<Close classes='size-5' />
+						</button>
 					</div>
 
-					<div className='grid grid-cols-1 gap-4 py-6 sm:grid-cols-2'>
-						<div className='flex flex-col'>
-							<span className='text-sm text-secondary'>{i18n.EMAIL}</span>
-							<span className='text-base text-primary'>{rowInfo.email}</span>
-						</div>
+					{/* Content - Scrollable */}
+					<div className='flex-1 space-y-6 overflow-y-auto pr-2 sm:pr-4'>
+						<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+							<div className='group rounded-xl bg-white/5 p-4 transition-all hover:bg-white/10 hover:shadow-lg'>
+								<span className='mb-2 block text-xs font-semibold uppercase tracking-wider text-secondary'>
+									{i18n.EMAIL}
+								</span>
+								<span className='block break-all text-base font-medium text-primary'>
+									{rowInfo.email}
+								</span>
+							</div>
 
-						<div className='flex flex-col'>
-							<span className='text-sm text-secondary'>{i18n.REASON}</span>
-							<p className='whitespace-pre-wrap text-base text-primary'>
-								{convertReason(rowInfo.reason)}
-							</p>
-						</div>
+							<div className='group rounded-xl bg-white/5 p-4 transition-all hover:bg-white/10 hover:shadow-lg'>
+								<span className='mb-2 block text-xs font-semibold uppercase tracking-wider text-secondary'>
+									{i18n.PHONE}
+								</span>
+								<span className='block text-base font-medium text-primary'>{rowInfo.phone}</span>
+							</div>
 
-						<div className='flex flex-col'>
-							<span className='text-sm text-secondary'>{i18n.ACCESSORIES}</span>
-							<span className='text-base text-primary'>{rowInfo.accessories}</span>
-						</div>
+							<div className='group rounded-xl bg-white/5 p-4 transition-all hover:bg-white/10 hover:shadow-lg'>
+								<span className='mb-2 block text-xs font-semibold uppercase tracking-wider text-secondary'>
+									{i18n.DATE}
+								</span>
+								<span className='block text-base font-medium text-primary'>{rowInfo.date}</span>
+							</div>
 
-						<div className='flex flex-col'>
-							<span className='text-sm text-secondary'>{i18n.PEOPLE}</span>
-							<span className='text-base text-primary'>{rowInfo.people}</span>
-						</div>
+							<div className='group rounded-xl bg-white/5 p-4 transition-all hover:bg-white/10 hover:shadow-lg'>
+								<span className='mb-2 block text-xs font-semibold uppercase tracking-wider text-secondary'>
+									{i18n.TIME}
+								</span>
+								<span className='block text-base font-medium text-primary'>
+									{rowInfo.time.replace('-', ':')}
+								</span>
+							</div>
 
-						<div className='flex flex-col'>
-							<span className='text-sm text-secondary'>{i18n.OUTFITS}</span>
-							<span className='text-base text-primary'>{rowInfo.outfits}</span>
-						</div>
+							<div className='group rounded-xl bg-white/5 p-4 transition-all hover:bg-white/10 hover:shadow-lg'>
+								<span className='mb-2 block text-xs font-semibold uppercase tracking-wider text-secondary'>
+									{i18n.MODE}
+								</span>
+								<span className='block text-base font-medium text-primary'>
+									{convertMode(rowInfo.mode)}
+								</span>
+							</div>
 
-						<div className='flex flex-col'>
-							<span className='text-sm text-secondary'>{i18n.PHONE}</span>
-							<span className='text-base text-primary'>{rowInfo.phone}</span>
-						</div>
+							<div className='group rounded-xl bg-white/5 p-4 transition-all hover:bg-white/10 hover:shadow-lg'>
+								<span className='mb-2 block text-xs font-semibold uppercase tracking-wider text-secondary'>
+									{i18n.PEOPLE}
+								</span>
+								<span className='block text-base font-medium text-primary'>{rowInfo.people}</span>
+							</div>
 
-						<div className='flex flex-col'>
-							<span className='text-sm text-secondary'>{i18n.DATE}</span>
-							<span className='text-base text-primary'>{rowInfo.date}</span>
-						</div>
+							<div className='group rounded-xl bg-white/5 p-4 transition-all hover:bg-white/10 hover:shadow-lg'>
+								<span className='mb-2 block text-xs font-semibold uppercase tracking-wider text-secondary'>
+									{i18n.OUTFITS}
+								</span>
+								<span className='block text-base font-medium text-primary'>{rowInfo.outfits}</span>
+							</div>
 
-						<div className='flex flex-col'>
-							<span className='text-sm text-secondary'>{i18n.TIME}</span>
-							<span className='text-base text-primary'>{rowInfo.time.replace('-', ':')}</span>
-						</div>
+							<div className='group rounded-xl bg-white/5 p-4 transition-all hover:bg-white/10 hover:shadow-lg'>
+								<span className='mb-2 block text-xs font-semibold uppercase tracking-wider text-secondary'>
+									{i18n.ACCESSORIES}
+								</span>
+								<span className='block text-base font-medium text-primary'>
+									{rowInfo.accessories}
+								</span>
+							</div>
 
-						<div className='flex flex-col'>
-							<span className='text-sm text-secondary'>{i18n.MODE}</span>
-							<span className='text-base text-primary'>{convertMode(rowInfo.mode)}</span>
-						</div>
+							<div className='group col-span-1 rounded-xl bg-white/5 p-4 transition-all hover:bg-white/10 hover:shadow-lg sm:col-span-2'>
+								<span className='mb-2 block text-xs font-semibold uppercase tracking-wider text-secondary'>
+									{i18n.REASON}
+								</span>
+								<p className='whitespace-pre-wrap text-base font-medium text-primary'>
+									{convertReason(rowInfo.reason)}
+								</p>
+							</div>
 
-						<div className='flex flex-col'>
-							<span className='text-sm font-semibold text-secondary'>{i18n.STATUS}</span>
-							<select
-								onChange={handlUpdateRowInfoStatus}
-								name='date-status'
-								defaultValue={rowInfo.status}
-								className='rounded-lg bg-accent/10 p-2 text-primary outline-none transition-all placeholder:text-slate-500 focus:outline-1 focus:outline-main placeholder:focus:invisible'
-							>
-								<option
-									{...(rowInfo.status === DateStatus.CONFIRMED
-										? { selected: true }
-										: { selected: false })}
-									className='bg-blue-950'
-									value={DateStatus.CONFIRMED}
+							<div className='group col-span-1 rounded-xl bg-white/5 p-4 transition-all hover:bg-white/10 hover:shadow-lg sm:col-span-2'>
+								<span className='mb-3 block text-xs font-semibold uppercase tracking-wider text-secondary'>
+									{i18n.STATUS}
+								</span>
+								<select
+									onChange={handlUpdateRowInfoStatus}
+									name='date-status'
+									defaultValue={rowInfo.status}
+									className='w-full rounded-xl border border-white/20 bg-white/10 p-3 text-base font-medium text-primary outline-none backdrop-blur-sm transition-all placeholder:text-slate-500 focus:border-accent focus:bg-white/15 focus:ring-2 focus:ring-accent/20 focus:ring-offset-2 focus:ring-offset-back'
 								>
-									{i18n.CONFIRMED}
-								</option>
-								<option
-									{...(rowInfo.status === DateStatus.DONE
-										? { selected: true }
-										: { selected: false })}
-									className='bg-blue-950'
-									value={DateStatus.DONE}
-								>
-									{i18n.DONE}
-								</option>
-								<option
-									{...(rowInfo.status === DateStatus.PENDING
-										? { selected: true }
-										: { selected: false })}
-									className='bg-blue-950'
-									value={DateStatus.PENDING}
-								>
-									{i18n.PENDING}
-								</option>
-								<option
-									{...(rowInfo.status === DateStatus.OVERDUE
-										? { selected: true }
-										: { selected: false })}
-									className='bg-blue-950'
-									value={DateStatus.OVERDUE}
-								>
-									{i18n.OVERDUE}
-								</option>
-								<option
-									{...(rowInfo.status === DateStatus.CANCELLED
-										? { selected: true }
-										: { selected: false })}
-									className='bg-blue-950'
-									value={DateStatus.CANCELLED}
-								>
-									{i18n.CANCELLED}
-								</option>
-							</select>
+									<option className='bg-back text-primary' value={DateStatus.CONFIRMED}>
+										{i18n.CONFIRMED}
+									</option>
+									<option className='bg-back text-primary' value={DateStatus.DONE}>
+										{i18n.DONE}
+									</option>
+									<option className='bg-back text-primary' value={DateStatus.PENDING}>
+										{i18n.PENDING}
+									</option>
+									<option className='bg-back text-primary' value={DateStatus.OVERDUE}>
+										{i18n.OVERDUE}
+									</option>
+									<option className='bg-back text-primary' value={DateStatus.CANCELLED}>
+										{i18n.CANCELLED}
+									</option>
+								</select>
+							</div>
 						</div>
 					</div>
 
-					<div className={`flex w-full flex-row justify-end gap-3 p-2`}>
+					{/* Actions */}
+					<div className='mt-6 flex w-full flex-col gap-3 border-t border-white/10 pt-4 sm:flex-row sm:justify-end'>
 						<button
 							onClick={handleDelete}
 							type='button'
-							{...(!saving ? {} : { disabled: true })}
-							className={`group relative flex h-fit w-fit flex-row items-center justify-center gap-2 overflow-hidden ${!saving ? 'cursor-pointer text-primary' : 'cursor-not-allowed bg-red-900 text-slate-400'} ${saving ? '' : 'active:border-red-500 active:text-danger sm:hover:border-danger sm:hover:text-danger'} rounded-xl border border-transparent px-3 py-2 text-lg font-bold transition`}
+							disabled={saving}
+							className={`group relative flex flex-1 items-center justify-center gap-2 overflow-hidden rounded-xl px-6 py-3 text-base font-semibold transition-all duration-200 sm:flex-initial ${!saving ? 'cursor-pointer border border-red-500/30 bg-red-500/10 text-red-400 hover:border-red-500/50 hover:bg-red-500/20 hover:text-red-300 active:scale-95' : 'cursor-not-allowed border border-red-900/30 bg-red-900/10 text-red-900/50'}`}
 						>
-							<span
-								className={`absolute left-0 h-full w-full -skew-x-3 bg-danger transition-all duration-300 ease-in-out group-active:w-0 sm:group-hover:w-0 ${saving ? 'hidden' : ''}`}
-							></span>
-
-							<span className='relative'>
+							<span className='relative flex items-center gap-2'>
 								<Trash classes='size-5' />
+								{i18n.DELETE}
 							</span>
-							<span className='relative'>{i18n.DELETE}</span>
 						</button>
 
 						<button
 							type='button'
-							{...(!saving ? {} : { disabled: true })}
-							className={`group relative flex h-fit w-fit flex-row items-center justify-center gap-2 overflow-hidden ${!saving ? 'cursor-pointer text-primary' : 'cursor-not-allowed bg-blue-900 text-slate-400'} ${saving ? '' : 'active:border-accent active:text-main sm:hover:border-main sm:hover:text-main'} rounded-xl border border-transparent px-3 py-2 text-lg font-bold transition`}
+							disabled={saving}
 							onClick={handleSaving}
+							className={`group relative flex flex-1 items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-accent to-main px-6 py-3 text-base font-semibold text-white shadow-lg shadow-main/30 transition-all duration-200 hover:shadow-xl hover:shadow-main/40 active:scale-95 sm:flex-initial ${saving ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
 						>
-							<span
-								className={`absolute left-0 h-full w-full -skew-x-3 bg-main transition-all duration-300 ease-in-out group-active:w-0 sm:group-hover:w-0 ${saving ? 'hidden' : ''}`}
-							></span>
-
-							<span className='relative'>
-								{!saving ? <Save classes='size-5' /> : <Loading classes='size-5' />}
+							<span className='relative flex items-center gap-2'>
+								{!saving ? <Save classes='size-5' /> : <Loading classes='size-5 animate-spin' />}
+								{!saving ? i18n.SAVE : i18n.SAVING}
 							</span>
-							<span className='relative'>{`${!saving ? i18n.SAVE : i18n.SAVING}`}</span>
 						</button>
 					</div>
 				</div>
 			</div>
 
-			<div className='flex w-full max-w-4xl flex-col md:w-11/12 lg:w-8/12'>
-				<h2 className='mb-8 flex items-center gap-x-3 text-3xl font-semibold text-primary sm:text-4xl'>
-					<Dashboard classes='size-8' />
-					{i18n.DASHBOARD}
-				</h2>
+			<div className='flex w-full max-w-6xl flex-col'>
+				{/* Header Section */}
+				<div className='mb-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between'>
+					<div className='flex items-center gap-3'>
+						<div className='flex size-12 items-center justify-center rounded-xl bg-gradient-to-br from-accent/20 to-main/20 backdrop-blur-sm'>
+							<Dashboard classes='size-6 text-accent' />
+						</div>
+						<h2 className='bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-3xl font-bold text-transparent sm:text-4xl'>
+							{i18n.DASHBOARD}
+						</h2>
+					</div>
+				</div>
 
-				<div className='mb-4 flex w-full items-center justify-between'>
-					<div>
+				{/* Controls Section */}
+				<div className='mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
+					<div className='relative' ref={dropdownRef}>
 						<button
 							onClick={handleViewToggle}
-							className='relative inline-flex items-center rounded-lg border border-gray-600 bg-blue-950/20 px-3 py-1.5 text-sm font-medium text-secondary transition-colors hover:border-gray-600 hover:bg-secondary/20 focus:outline-none'
+							className='relative inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-4 py-2.5 text-sm font-medium text-primary backdrop-blur-sm transition-all hover:border-accent/50 hover:bg-white/10 hover:shadow-lg hover:shadow-accent/10 focus:outline-none focus:ring-2 focus:ring-accent/20 active:scale-95'
 							type='button'
+							aria-expanded={isViewOpen}
+							aria-haspopup='true'
 						>
-							{todaysSort
-								? i18n.TODAYs_DATES
-								: tomorrowsSort
-									? i18n.TOMORROWs_DATES
-									: i18n.ALL_DATES}
-							<SemiArrow classes='ms-2.5 rotate-180 size-2.5' />
+							<span>
+								{todaysSort
+									? i18n.TODAYs_DATES
+									: tomorrowsSort
+										? i18n.TOMORROWs_DATES
+										: i18n.ALL_DATES}
+							</span>
+							<SemiArrow
+								classes={`size-3 transition-transform duration-200 ${isViewOpen ? '' : 'rotate-180'}`}
+							/>
 						</button>
 
 						<div
-							className={`absolute ${isViewOpen ? '' : 'hidden'} z-10 mt-2 w-44 overflow-hidden rounded-lg bg-accent/10 shadow-sm backdrop-blur-xl`}
+							className={`absolute left-0 top-full z-20 mt-2 w-48 overflow-hidden rounded-xl border border-white/20 bg-back/95 shadow-xl backdrop-blur-xl transition-all duration-200 ${isViewOpen ? 'visible translate-y-0 opacity-100' : 'pointer-events-none invisible -translate-y-2 opacity-0'}`}
+							role='menu'
 						>
-							<ul className='text-sm text-gray-200'>
+							<ul className='py-1 text-sm text-primary'>
 								<li
 									onClick={handleAllDatesSort}
-									className='block cursor-pointer select-none px-4 py-2 transition-colors hover:bg-secondary/20 hover:text-white'
+									className='cursor-pointer select-none px-4 py-2.5 transition-colors hover:bg-white/10 hover:text-accent'
 								>
 									{i18n.ALL_DATES}
 								</li>
 								<li
 									onClick={handleTodaysSort}
-									className='block cursor-pointer select-none px-4 py-2 transition-colors hover:bg-secondary/20 hover:text-white'
+									className='cursor-pointer select-none px-4 py-2.5 transition-colors hover:bg-white/10 hover:text-accent'
 								>
 									{i18n.TODAYs_DATES}
 								</li>
 								<li
 									onClick={handleTomorrowsSort}
-									className='block cursor-pointer select-none px-4 py-2 transition-colors hover:bg-secondary/20 hover:text-white'
+									className='cursor-pointer select-none px-4 py-2.5 transition-colors hover:bg-white/10 hover:text-accent'
 								>
 									{i18n.TOMORROWs_DATES}
 								</li>
+								<li className='my-1 border-t border-white/10'></li>
 								<li
 									onClick={handleLogout}
-									className='block cursor-pointer select-none px-4 py-2 transition-colors hover:bg-secondary/20 hover:text-white'
+									className='cursor-pointer select-none px-4 py-2.5 text-red-400 transition-colors hover:bg-red-500/10 hover:text-red-300'
 								>
 									{i18n.LOGOUT}
 								</li>
@@ -395,135 +443,182 @@ export const DashboardDataTable = ({
 						</div>
 					</div>
 
-					<label>
-						<div className='relative'>
-							<div className='pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3'>
-								<Search classes='size-4 text-secondary' />
-							</div>
-							<input
-								onKeyUp={handleChange}
-								type='text'
-								id='table-search-users'
-								className='block w-52 rounded-lg bg-accent/10 p-2 ps-10 text-primary outline-none transition-all placeholder:text-slate-500 focus:outline-1 focus:outline-main md:w-80'
-								placeholder='Search for dates'
-							/>
+					<label className='relative'>
+						<div className='pointer-events-none absolute inset-y-0 start-0 z-10 flex items-center ps-4'>
+							<Search classes='size-4 text-secondary' />
 						</div>
+						<input
+							onKeyUp={handleChange}
+							type='text'
+							id='table-search-users'
+							className='block w-full rounded-xl border border-white/20 bg-white/5 p-3 ps-11 text-primary outline-none backdrop-blur-sm transition-all placeholder:text-slate-500 focus:border-accent/50 focus:bg-white/10 focus:ring-2 focus:ring-accent/20 sm:w-80'
+							placeholder='Search for dates...'
+						/>
 					</label>
 				</div>
 
-				<table className='w-full overflow-hidden rounded-lg text-left text-sm text-primary'>
-					<thead className='bg-blue-950/60 text-xs uppercase text-primary'>
-						<tr>
-							<th scope='col' className='w-10 select-none px-3 py-4'>
-								#
-							</th>
-							<th
-								scope='col'
-								className={`w-48 select-none items-center px-2 py-4 transition-colors ${nameSort ? 'text-accent' : ''}`}
-							>
-								<span onClick={handleNameSort} className='inline-flex cursor-pointer gap-1'>
-									{i18n.NAME}
-									<SortAscending
-										classes={`size-4 transition ${nameSort ? 'opacity-100' : 'opacity-0'}`}
-									/>
-								</span>
-							</th>
-							<th scope='col' className='w-32 select-none px-2 py-4'>
-								{i18n.PHONE}
-							</th>
-							<th
-								scope='col'
-								className={`w-28 select-none items-center px-2 py-4 transition-colors ${dateSort ? 'text-accent' : ''}`}
-							>
-								<span onClick={handleDateSort} className={'inline-flex cursor-pointer gap-1'}>
-									{i18n.DATE}
-									<SortAscendingNumbers
-										classes={`size-4 transition ${dateSort ? 'opacity-100' : 'opacity-0'}`}
-									/>
-								</span>
-							</th>
-							<th
-								scope='col'
-								className={`w-20 select-none items-center px-2 py-4 transition-colors ${timeSort ? 'text-accent' : ''}`}
-							>
-								<span onClick={handleTimeSort} className='inline-flex cursor-pointer gap-1'>
-									{i18n.TIME}
-									<SortAscendingNumbers
-										classes={`size-4 transition ${timeSort ? 'opacity-100' : 'opacity-0'}`}
-									/>
-								</span>
-							</th>
-							<th scope='col' className='w-28 select-none px-2 py-4'>
-								{i18n.MODE}
-							</th>
-							<th
-								scope='col'
-								className={`w-36 select-none items-center px-2 py-4 ${statusSort ? 'text-accent' : ''}`}
-							>
-								<span onClick={handleStatusSort} className='inline-flex cursor-pointer gap-1'>
-									{i18n.STATUS}
-									<span
-										className={`size-3.5 rounded-full bg-orange-500 transition ${statusSort ? 'opacity-100' : 'opacity-0'}`}
-									></span>
-								</span>
-							</th>
-						</tr>
-					</thead>
-					<tbody className='bg-blue-950/20'>
-						{dates.length > 0 &&
-							!loading &&
-							dates.map((row, idx) => (
-								<DashboardDataRows
-									onClick={handleClickRow}
-									data_row={row.uuid}
-									key={row.uuid}
-									idx={(page - 1) * datesShowing + idx + 1}
-									name={row.name}
-									date={row.date}
-									time={row.time.replace('-', ':')}
-									status={row.status}
-									mode={convertMode(row.mode)}
-									phone={row.phone}
-								/>
-							))}
-					</tbody>
-				</table>
+				{/* Table Container with Glass Morphism */}
+				<div className='overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-xl backdrop-blur-sm'>
+					<div className='overflow-x-auto'>
+						<table className='w-full text-left text-sm text-primary'>
+							<thead className='border-b border-white/10 bg-white/5 text-xs uppercase tracking-wider'>
+								<tr>
+									<th scope='col' className='select-none px-4 py-4 font-semibold text-secondary'>
+										#
+									</th>
+									<th
+										scope='col'
+										className={`select-none items-center px-4 py-4 font-semibold transition-colors ${nameSort ? 'text-accent' : 'text-secondary'}`}
+									>
+										<button
+											onClick={handleNameSort}
+											className='inline-flex items-center gap-2 hover:text-accent focus:outline-none'
+										>
+											{i18n.NAME}
+											<SortAscending
+												classes={`size-4 transition-all ${nameSort ? 'opacity-100 scale-100' : 'opacity-40 scale-90'}`}
+											/>
+										</button>
+									</th>
+									<th
+										scope='col'
+										className='hidden select-none px-4 py-4 font-semibold text-secondary sm:table-cell'
+									>
+										{i18n.PHONE}
+									</th>
+									<th
+										scope='col'
+										className={`select-none items-center px-4 py-4 font-semibold transition-colors ${dateSort ? 'text-accent' : 'text-secondary'}`}
+									>
+										<button
+											onClick={handleDateSort}
+											className='inline-flex items-center gap-2 hover:text-accent focus:outline-none'
+										>
+											{i18n.DATE}
+											<SortAscendingNumbers
+												classes={`size-4 transition-all ${dateSort ? 'opacity-100 scale-100' : 'opacity-40 scale-90'}`}
+											/>
+										</button>
+									</th>
+									<th
+										scope='col'
+										className={`select-none items-center px-4 py-4 font-semibold transition-colors ${timeSort ? 'text-accent' : 'text-secondary'}`}
+									>
+										<button
+											onClick={handleTimeSort}
+											className='inline-flex items-center gap-2 hover:text-accent focus:outline-none'
+										>
+											{i18n.TIME}
+											<SortAscendingNumbers
+												classes={`size-4 transition-all ${timeSort ? 'opacity-100 scale-100' : 'opacity-40 scale-90'}`}
+											/>
+										</button>
+									</th>
+									<th
+										scope='col'
+										className='hidden select-none px-4 py-4 font-semibold text-secondary md:table-cell'
+									>
+										{i18n.MODE}
+									</th>
+									<th
+										scope='col'
+										className={`select-none items-center px-4 py-4 font-semibold transition-colors ${statusSort ? 'text-accent' : 'text-secondary'}`}
+									>
+										<button
+											onClick={handleStatusSort}
+											className='inline-flex items-center gap-2 hover:text-accent focus:outline-none'
+										>
+											{i18n.STATUS}
+											<span
+												className={`size-3 rounded-full bg-orange-500 transition-all ${statusSort ? 'scale-100 opacity-100' : 'scale-90 opacity-40'}`}
+											></span>
+										</button>
+									</th>
+								</tr>
+							</thead>
+							<tbody className='divide-y divide-white/5'>
+								{dates.length > 0 &&
+									!loading &&
+									dates.map((row, idx) => (
+										<DashboardDataRows
+											onClick={handleClickRow}
+											data_row={row.uuid}
+											key={row.uuid}
+											idx={(page - 1) * datesShowing + idx + 1}
+											name={row.name}
+											date={row.date}
+											time={row.time.replace('-', ':')}
+											status={row.status}
+											mode={convertMode(row.mode)}
+											phone={row.phone}
+										/>
+									))}
+							</tbody>
+						</table>
+					</div>
+				</div>
 
+				{/* Pagination */}
 				{!loading && totalCount > dates.length && (
-					<div className='mt-2 flex justify-end gap-2 text-slate-400'>
-						{page > 1 && (
-							<button onClick={handlePrevPage} type='button'>
-								<SemiArrow classes='size-4 -rotate-90' />
-							</button>
-						)}
+					<div className='mt-6 flex flex-wrap items-center justify-center gap-2'>
+						<button
+							onClick={handlePrevPage}
+							disabled={page === 1}
+							type='button'
+							className='flex size-9 items-center justify-center rounded-lg border border-white/20 bg-white/5 text-primary transition-all hover:border-accent/50 hover:bg-white/10 hover:text-accent disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-white/20 disabled:hover:bg-white/5 disabled:hover:text-primary'
+							aria-label='Previous page'
+						>
+							<SemiArrow classes='size-4 -rotate-90' />
+						</button>
 
 						{page > 2 && (
-							<button className='cursor-pointer select-none' onClick={handlePageOne} type='button'>
+							<button
+								className='cursor-pointer select-none rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-primary transition-all hover:border-accent/50 hover:bg-white/10 hover:text-accent'
+								onClick={handlePageOne}
+								type='button'
+							>
 								1 ...
 							</button>
 						)}
 
-						<span className='select-none'>{page}</span>
+						<span className='flex size-9 items-center justify-center rounded-lg border border-accent/50 bg-accent/10 px-4 py-2 text-sm font-semibold text-accent'>
+							{page}
+						</span>
 
 						{page < totalPages && (
-							<button onClick={handleNextPage} type='button'>
+							<button
+								onClick={handleNextPage}
+								type='button'
+								className='flex size-9 items-center justify-center rounded-lg border border-white/20 bg-white/5 text-primary transition-all hover:border-accent/50 hover:bg-white/10 hover:text-accent'
+								aria-label='Next page'
+							>
 								<SemiArrow classes='size-4 rotate-90' />
 							</button>
 						)}
 					</div>
 				)}
 
+				{/* Loading State */}
 				<div
-					className={`inline-flex w-full items-center justify-center py-4 ${!loading ? 'hidden' : ''}`}
+					className={`inline-flex w-full items-center justify-center py-12 ${!loading ? 'hidden' : ''}`}
 				>
-					<Loading classes='size-8 text-slate-400' />
+					<div className='flex flex-col items-center gap-4'>
+						<Loading classes='size-10 animate-spin text-accent' />
+						<span className='text-sm text-secondary'>Loading dates...</span>
+					</div>
 				</div>
 
-				<span
-					className={`pointer-events-none w-full select-none px-2 py-4 text-center text-slate-600 ${dates.length === 0 && !loading ? '' : 'hidden'}`}
+				{/* Empty State */}
+				<div
+					className={`flex flex-col items-center justify-center py-12 ${dates.length === 0 && !loading ? '' : 'hidden'}`}
 				>
-					{i18n.NO_DATES_TO_SHOW}
-				</span>
+					<div className='rounded-full bg-white/5 p-4'>
+						<Search classes='size-8 text-secondary' />
+					</div>
+					<p className='mt-4 text-center text-base font-medium text-secondary'>
+						{i18n.NO_DATES_TO_SHOW}
+					</p>
+				</div>
 			</div>
 		</>
 	)

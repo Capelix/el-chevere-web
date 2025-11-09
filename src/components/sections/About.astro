@@ -1,7 +1,7 @@
 ---
 import UsersGroup from '@/icons/UsersGroup.astro'
-import { getI18N } from '@/languages/index'
 import { philosophy } from '@/libs/consts'
+import { getI18N } from '@/locales/index'
 import MainTitle from '../MainTitle.astro'
 
 const currentLocale = Astro.currentLocale
@@ -19,23 +19,25 @@ const sections = philosophy(currentLocale)
 		{
 			sections.map(({ title, description, icon }, index) => (
 				<div
-					class={`group relative flex transform flex-col items-center rounded-2xl border border-accent/10 bg-glass p-8 text-center backdrop-blur-md shadow-lg transition-all duration-500 hover:scale-105 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/20 ${index === 0 ? 'fade-right-anim' : ''} ${index === 1 ? 'fade-up-anim' : ''} ${index === 2 ? 'fade-left-anim' : ''}`}
+					class={`group relative flex transform flex-col items-center rounded-2xl border border-accent/10 bg-glass p-8 text-center shadow-lg backdrop-blur-md transition-all duration-500 hover:scale-105 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/20 ${index === 0 ? 'fade-right-anim' : ''} ${index === 1 ? 'fade-up-anim' : ''} ${index === 2 ? 'fade-left-anim' : ''}`}
 				>
-					<div class='absolute inset-0 rounded-2xl bg-gradient-to-br from-accent/0 via-accent/5 to-main/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100'></div>
-					
+					<div class='absolute inset-0 rounded-2xl bg-gradient-to-br from-accent/0 via-accent/5 to-main/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100' />
+
 					<div class='relative mb-4'>
-						<div class='absolute inset-0 rounded-full bg-accent/20 blur-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100'></div>
-						<span class='relative block text-6xl transition-all duration-500 group-hover:-rotate-12 group-hover:scale-110'>{icon}</span>
+						<div class='absolute inset-0 rounded-full bg-accent/20 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100' />
+						<span class='relative block text-6xl transition-all duration-500 group-hover:-rotate-12 group-hover:scale-110'>
+							{icon}
+						</span>
 					</div>
-					
+
 					<h3 class='relative mt-2 text-2xl font-bold text-primary transition-colors duration-300 group-hover:text-accent lg:text-3xl'>
 						{title}
 					</h3>
 					<p class='relative mt-4 text-base leading-relaxed text-secondary transition-colors duration-300 group-hover:text-primary lg:text-lg'>
 						{description}
 					</p>
-					
-					<div class='relative mt-6 h-1 w-16 rounded-full bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 transition-all duration-500 group-hover:w-24 group-hover:opacity-100'></div>
+
+					<div class='relative mt-6 h-1 w-16 rounded-full bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 transition-all duration-500 group-hover:w-24 group-hover:opacity-100' />
 				</div>
 			))
 		}

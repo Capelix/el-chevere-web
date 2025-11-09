@@ -1,5 +1,5 @@
 import type { Reason } from '@/interfaces/reason'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 
 export const getReasons = (currentLocale: string = 'es'): Reason[] => {
 	const i18n = getI18N({ currentLocale })

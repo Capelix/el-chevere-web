@@ -4,8 +4,8 @@ import { SendForm } from '@/components/SendForm'
 import Chat from '@/icons/Chat.astro'
 import Check from '@/icons/Check.astro'
 import Copy from '@/icons/Copy.astro'
-import { getI18N } from '@/languages/index.ts'
 import { businessEmail, businessInstagram, businessWhatsApp } from '@/libs/consts'
+import { getI18N } from '@/locales/index.ts'
 
 const email: string = businessEmail
 const { currentLocale } = Astro
@@ -75,9 +75,9 @@ const i18n = getI18N({ currentLocale })
 </div>
 
 <script>
-	import { getI18N } from '@/languages/index'
 	import { businessEmail } from '@/libs/consts'
 	import { $ } from '@/libs/dom-selector.ts'
+	import { getI18N } from '@/locales/index'
 
 	document.addEventListener('astro:page-load', () => {
 		const copyEmailButton = $('#copyEmailButton')

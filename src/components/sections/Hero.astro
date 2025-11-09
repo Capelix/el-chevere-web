@@ -1,8 +1,8 @@
 ---
 import DateCheck from '@/icons/DateCheck.astro'
 import Pin from '@/icons/Pin.astro'
-import { getI18N } from '@/languages/index'
 import { gMapLocation } from '@/libs/consts'
+import { getI18N } from '@/locales/index'
 
 const currentLocale = Astro.currentLocale
 const i18n = getI18N({ currentLocale })
@@ -21,8 +21,8 @@ const parallax = `bg-parallax-${new Date().getDay() + 1}`
 	class='relative z-10 flex min-h-screen w-full items-center justify-center px-4 py-20 pt-20 sm:px-6 sm:pt-24 lg:px-8 lg:pt-28'
 >
 	<div class='flex w-full max-w-5xl flex-col gap-6 md:w-11/12 lg:w-9/12'>
-		<a 
-			href='https://fotoestudioelchevere.com/' 
+		<a
+			href='https://fotoestudioelchevere.com/'
 			class='group mb-2 flex max-w-sm items-center transition-transform duration-300 hover:scale-105 md:max-w-md'
 		>
 			<img
@@ -35,9 +35,11 @@ const parallax = `bg-parallax-${new Date().getDay() + 1}`
 				class='drop-shadow-2xl filter'
 			/>
 		</a>
-		
+
 		<div class='fade-up-anim space-y-4'>
-			<p class='max-w-3xl text-pretty text-xl font-medium leading-relaxed text-primary drop-shadow-lg md:text-2xl lg:text-3xl'>
+			<p
+				class='max-w-3xl text-pretty text-xl font-medium leading-relaxed text-primary drop-shadow-lg md:text-2xl lg:text-3xl'
+			>
 				{i18n.HERO_TEXT_1}
 				<br />
 				<span class='bg-gradient-to-r from-accent via-main to-accent bg-clip-text text-transparent'>
@@ -71,12 +73,24 @@ const parallax = `bg-parallax-${new Date().getDay() + 1}`
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- Floating particles effect -->
 	<div class='pointer-events-none absolute inset-0 overflow-hidden'>
-		<div class='absolute left-1/4 top-1/4 h-2 w-2 animate-float rounded-full bg-accent/30' style='animation-delay: 0s;'></div>
-		<div class='absolute left-3/4 top-1/3 h-3 w-3 animate-float rounded-full bg-main/20' style='animation-delay: 2s;'></div>
-		<div class='absolute left-1/2 top-2/3 h-2 w-2 animate-float rounded-full bg-accent/20' style='animation-delay: 4s;'></div>
+		<div
+			class='absolute left-1/4 top-1/4 h-2 w-2 animate-float rounded-full bg-accent/30'
+			style='animation-delay: 0s;'
+		>
+		</div>
+		<div
+			class='absolute left-3/4 top-1/3 h-3 w-3 animate-float rounded-full bg-main/20'
+			style='animation-delay: 2s;'
+		>
+		</div>
+		<div
+			class='absolute left-1/2 top-2/3 h-2 w-2 animate-float rounded-full bg-accent/20'
+			style='animation-delay: 4s;'
+		>
+		</div>
 	</div>
 </div>
 

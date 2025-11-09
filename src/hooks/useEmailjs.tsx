@@ -1,7 +1,7 @@
 import type { Email } from '@/interfaces/email'
 import emailjs from '@emailjs/browser'
 import { useState } from 'preact/hooks'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 
 export function useEmailjs() {
 	const [sending, setSending] = useState(false)

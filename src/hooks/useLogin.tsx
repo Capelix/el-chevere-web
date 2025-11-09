@@ -1,4 +1,4 @@
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 import { useState } from 'preact/hooks'
 
 export function useLogin() {

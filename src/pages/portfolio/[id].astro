@@ -4,8 +4,8 @@ import MainTitle from '@/components/MainTitle.astro'
 import SectionContainer from '@/components/SectionContainer.astro'
 import { Loading } from '@/icons/Loading'
 import UpArrow from '@/icons/UpArrow.astro'
-import { getI18N } from '@/languages/index'
 import Layout from '@/layouts/Layout.astro'
+import { getI18N } from '@/locales/index'
 import { getCategories } from '@/services/categories'
 import 'photoswipe/style.css'
 
@@ -25,7 +25,7 @@ const category = getCategories(currentLocale).find((category) => category.id ===
 			<MainTitle>
 				<div>
 					<UpArrow
-						class='back-button size-12 -rotate-90 cursor-pointer rounded-2xl border border-accent/20 bg-glass p-2 text-accent backdrop-blur-sm transition-all duration-300 hover:border-accent/40 hover:bg-accent/10 hover:scale-110 active:scale-95'
+						class='back-button size-12 -rotate-90 cursor-pointer rounded-2xl border border-accent/20 bg-glass p-2 text-accent backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:border-accent/40 hover:bg-accent/10 active:scale-95'
 					/>
 				</div>
 
@@ -47,7 +47,7 @@ const category = getCategories(currentLocale).find((category) => category.id ===
 								target='_blank'
 								class='hoverZoomLink group relative mb-6 block cursor-zoom-in break-inside-avoid overflow-hidden rounded-2xl border border-accent/10 bg-glass backdrop-blur-sm transition-all duration-500 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/20'
 							>
-								<div class='absolute inset-0 z-10 bg-gradient-to-t from-back/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100'></div>
+								<div class='absolute inset-0 z-10 bg-gradient-to-t from-back/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100' />
 								<LazyImage
 									src={`https://www.fotoestudioelchevere.com/${image.src}`}
 									alt={`Image ${index + 1}`}

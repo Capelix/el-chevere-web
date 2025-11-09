@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Date } from '@/interfaces/date'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 import { useState } from 'preact/hooks'
 import { DateStatus } from '@/interfaces/dateStatus'
 import { currentDate } from '@/libs/consts'

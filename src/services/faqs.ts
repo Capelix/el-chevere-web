@@ -1,5 +1,5 @@
 import type { Faq } from '@/interfaces/faqs'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 
 export const getFaqs = (currentLocale: string | undefined): Faq[] => {
 	const i18n = getI18N({ currentLocale })

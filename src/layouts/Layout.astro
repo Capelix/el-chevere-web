@@ -12,7 +12,7 @@ import Toast from '@/components/ui/Toast.astro'
 import WhatsAppButton from '@/components/ui/WhatsAppButton.astro'
 import Star from '@/icons/Star.astro'
 import type { Preload } from '@/interfaces/preload'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 import '@fontsource-variable/onest'
 import Analytics from '@vercel/analytics/astro'
 import { ClientRouter } from 'astro:transitions'
@@ -62,7 +62,7 @@ const i18n = getI18N({ currentLocale })
 			</SectionContainer>
 
 			<SectionContainer id='rating'>
-				<div class='flex w-full max-w-4xl flex-col md:w-11/12 lg:w-8/12'>
+				<div class='flex w-full max-w-6xl flex-col md:w-11/12 lg:w-10/12'>
 					<h2
 						class='mb-8 flex items-center gap-x-3 text-3xl font-semibold text-primary sm:text-4xl'
 					>
@@ -93,6 +93,7 @@ const i18n = getI18N({ currentLocale })
 		background: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
 		scroll-behavior: smooth;
 		color: #f8fafc;
+		scrollbar-gutter: stable;
 	}
 
 	body {
@@ -133,10 +134,34 @@ const i18n = getI18N({ currentLocale })
 		}
 	}
 
-	.fade-up-anim {
-		animation: fade-up-animation linear both;
-		animation-timeline: view();
-		animation-range: entry 5% cover 25%;
+	/* Disable fade animations on mobile for better performance and compatibility */
+	.fade-up-anim,
+	.fade-left-anim,
+	.fade-right-anim {
+		opacity: 1;
+		translate: 0 0;
+		scale: 1;
+	}
+
+	/* Enable fade animations only on larger screens */
+	@media (min-width: 768px) {
+		.fade-up-anim {
+			animation: fade-up-animation linear both;
+			animation-timeline: view();
+			animation-range: entry 5% cover 25%;
+		}
+
+		.fade-left-anim {
+			animation: fade-left-animation linear both;
+			animation-timeline: view();
+			animation-range: entry 5% cover 25%;
+		}
+
+		.fade-right-anim {
+			animation: fade-right-animation linear both;
+			animation-timeline: view();
+			animation-range: entry 5% cover 25%;
+		}
 	}
 
 	@keyframes fade-up-animation {
@@ -153,12 +178,6 @@ const i18n = getI18N({ currentLocale })
 		}
 	}
 
-	.fade-left-anim {
-		animation: fade-left-animation linear both;
-		animation-timeline: view();
-		animation-range: entry 5% cover 25%;
-	}
-
 	@keyframes fade-left-animation {
 		0% {
 			opacity: 0;
@@ -171,12 +190,6 @@ const i18n = getI18N({ currentLocale })
 			translate: 0 0;
 			scale: 1;
 		}
-	}
-
-	.fade-right-anim {
-		animation: fade-right-animation linear both;
-		animation-timeline: view();
-		animation-range: entry 5% cover 25%;
 	}
 
 	@keyframes fade-right-animation {

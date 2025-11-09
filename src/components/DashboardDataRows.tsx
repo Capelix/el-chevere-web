@@ -1,5 +1,5 @@
 import { DateStatus } from '@/interfaces/dateStatus'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 
 /* eslint-disable react/react-in-jsx-scope */
 interface Props {
@@ -29,46 +29,68 @@ export const DashboardDataRows = ({
 }: Props) => {
 	const i18n = getI18N({ currentLocale })
 
+	const getStatusBadge = () => {
+		if (status === DateStatus.DONE) {
+			return (
+				<div className='inline-flex items-center gap-2 rounded-full bg-green-500/20 px-3 py-1'>
+					<span className='size-2 rounded-full bg-green-500 shadow-sm shadow-green-500/50'></span>
+					<span className='text-xs font-medium text-green-400'>{i18n.DONE}</span>
+				</div>
+			)
+		}
+		if (status === DateStatus.PENDING) {
+			return (
+				<div className='inline-flex items-center gap-2 rounded-full bg-gray-500/20 px-3 py-1'>
+					<span className='size-2 rounded-full bg-gray-500 shadow-sm shadow-gray-500/50'></span>
+					<span className='text-xs font-medium text-gray-400'>{i18n.PENDING}</span>
+				</div>
+			)
+		}
+		if (status === DateStatus.CANCELLED) {
+			return (
+				<div className='inline-flex items-center gap-2 rounded-full bg-red-500/20 px-3 py-1'>
+					<span className='size-2 rounded-full bg-red-500 shadow-sm shadow-red-500/50'></span>
+					<span className='text-xs font-medium text-red-400'>{i18n.CANCELLED}</span>
+				</div>
+			)
+		}
+		if (status === DateStatus.OVERDUE) {
+			return (
+				<div className='inline-flex items-center gap-2 rounded-full bg-yellow-500/20 px-3 py-1'>
+					<span className='size-2 rounded-full bg-yellow-500 shadow-sm shadow-yellow-500/50'></span>
+					<span className='text-xs font-medium text-yellow-400'>{i18n.OVERDUE}</span>
+				</div>
+			)
+		}
+		return (
+			<div className='inline-flex items-center gap-2 rounded-full bg-orange-500/20 px-3 py-1'>
+				<span className='size-2 rounded-full bg-orange-500 shadow-sm shadow-orange-500/50'></span>
+				<span className='text-xs font-medium text-orange-400'>{i18n.CONFIRMED}</span>
+			</div>
+		)
+	}
+
 	return (
 		<tr
 			data-row={data_row}
 			onClick={onClick}
-			className={`cursor-pointer transition-colors sm:hover:bg-blue-950/30 ${idx % 2 === 0 ? '' : 'bg-blue-950/10'}`}
+			className='group cursor-pointer border-b border-white/5 transition-all hover:bg-white/5 active:bg-white/10'
 		>
-			<td className='w-10 p-3'>{idx}</td>
-			<td className='w-48 truncate px-2 py-4'>{name}</td>
-			<td className='w-32 px-2 py-4'>{phone}</td>
-			<td className='w-28 px-2 py-4'>{date}</td>
-			<td className='w-20 px-2 py-4'>{time}</td>
-			<td className='w-28 px-2 py-4'>{mode}</td>
-			<td className='w-36 px-2 py-4'>
-				{status === DateStatus.DONE ? (
-					<div className='flex flex-row items-center gap-2'>
-						<span className='size-3 rounded-full bg-green-500'></span>
-						<span>{i18n.DONE}</span>
-					</div>
-				) : status === DateStatus.PENDING ? (
-					<div className='flex flex-row items-center gap-2'>
-						<span className='size-3 rounded-full bg-gray-500'></span>
-						<span>{i18n.PENDING}</span>
-					</div>
-				) : status === DateStatus.CANCELLED ? (
-					<div className='flex flex-row items-center gap-2'>
-						<span className='size-3 rounded-full bg-red-500'></span>
-						<span>{i18n.CANCELLED}</span>
-					</div>
-				) : status === DateStatus.OVERDUE ? (
-					<div className='flex flex-row items-center gap-2'>
-						<span className='size-3 rounded-full bg-yellow-500'></span>
-						<span>{i18n.OVERDUE}</span>
-					</div>
-				) : (
-					<div className='flex flex-row items-center gap-2'>
-						<span className='size-3 rounded-full bg-orange-500'></span>
-						<span>{i18n.CONFIRMED}</span>
-					</div>
-				)}
+			<td className='px-4 py-4'>
+				<span className='text-sm font-medium text-secondary'>{idx}</span>
 			</td>
+			<td className='px-4 py-4'>
+				<span className='font-medium text-primary group-hover:text-accent transition-colors'>{name}</span>
+			</td>
+			<td className='hidden px-4 py-4 text-sm text-secondary sm:table-cell'>{phone}</td>
+			<td className='px-4 py-4'>
+				<span className='text-sm font-medium text-primary'>{date}</span>
+			</td>
+			<td className='px-4 py-4'>
+				<span className='text-sm font-medium text-primary'>{time}</span>
+			</td>
+			<td className='hidden px-4 py-4 text-sm text-secondary md:table-cell'>{mode}</td>
+			<td className='px-4 py-4'>{getStatusBadge()}</td>
 		</tr>
 	)
 }

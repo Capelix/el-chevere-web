@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'preact/hooks'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 import type { Review } from '@/interfaces/review'
 import { supabase } from '@/db/supabase'
 
@@ -129,9 +129,7 @@ export function useReviews() {
 			})
 
 			callback?.()
-			
-			// Refresh reviews to show the newly submitted review
-			// Use a small delay to ensure the database has been updated
+
 			setTimeout(() => {
 				refreshReviews()
 			}, 500)

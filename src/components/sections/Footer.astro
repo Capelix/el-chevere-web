@@ -1,15 +1,17 @@
 ---
 import Divider from '@/components/ui/Divider.astro'
 import type { FooterLink } from '@/interfaces/footerLink'
-import { getI18N } from '@/languages/index.ts'
 import { footerLinks } from '@/libs/consts'
+import { getI18N } from '@/locales/index'
 
 const { currentLocale } = Astro
 const i18n = getI18N({ currentLocale })
 const links: FooterLink[] = footerLinks()
 ---
 
-<footer class='flex w-full items-center justify-center border-t border-accent/10 bg-back/50 backdrop-blur-md'>
+<footer
+	class='flex w-full items-center justify-center border-t border-accent/10 bg-back/50 backdrop-blur-md'
+>
 	<div class='flex w-full max-w-6xl flex-col px-4 py-12 sm:px-6 md:w-11/12 lg:w-10/12 lg:px-8'>
 		<Divider />
 
@@ -27,19 +29,21 @@ const links: FooterLink[] = footerLinks()
 					alt='Logo Foto Estudio El Chévere'
 					loading='lazy'
 					decoding='async'
-					class='filter drop-shadow-lg'
+					class='drop-shadow-lg filter'
 				/>
 			</a>
 
-			<p class='max-w-lg text-pretty text-center text-sm leading-relaxed text-secondary lg:text-start'>
+			<p
+				class='max-w-lg text-pretty text-center text-sm leading-relaxed text-secondary lg:text-start'
+			>
 				&#169; 2025 Foto Estudio El Chévere. <br />
 				{i18n.FOOTER_TXT_1}
 				<a
 					rel='noopener noreferrer'
-					href='https://rikirilis.com/portfolio'
+					href='https://capelix.dev/portfolio'
 					target='_blank'
 					class='font-bold text-accent underline-offset-4 transition-all duration-300 hover:text-primary hover:underline'
-					>RikiRilis</a
+					>Capelix</a
 				>
 				(Rikelvi Capellán García) {i18n.FOOTER_TXT_2}
 				<a
@@ -103,7 +107,8 @@ const links: FooterLink[] = footerLinks()
 						href='https://fotoestudioelchevere.com/terms/'
 						rel='noopener noreferrer'
 						target='_blank'
-						class='text-sm text-secondary/70 underline-offset-4 transition-all duration-300 hover:text-primary hover:underline'>{i18n.TERMS}</a
+						class='text-sm text-secondary/70 underline-offset-4 transition-all duration-300 hover:text-primary hover:underline'
+						>{i18n.TERMS}</a
 					>
 				</li>
 			</ul>

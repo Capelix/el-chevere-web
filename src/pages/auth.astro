@@ -3,8 +3,8 @@ import MainTitle from '@/components/MainTitle.astro'
 import SectionContainer from '@/components/SectionContainer.astro'
 import { AuthForm } from '@/components/sections/AuthForm'
 import { User } from '@/icons/User'
-import { getI18N } from '@/languages/index'
 import Layout from '@/layouts/Layout.astro'
+import { getI18N } from '@/locales/index'
 
 const currentLocale = Astro.currentLocale
 const i18N = getI18N({ currentLocale })

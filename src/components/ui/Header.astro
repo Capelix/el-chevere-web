@@ -2,12 +2,10 @@
 import CloseIcon from '@/icons/CloseIcon.astro'
 import Menu from '@/icons/Menu.astro'
 import type { NavItem } from '@/interfaces/navItems'
-import { getI18N } from '@/languages/index.ts'
 import { navItemsProvider } from '@/libs/consts'
 import { AuthButton } from './AuthButton'
 
 const { currentLocale } = Astro
-const i18n = getI18N({ currentLocale })
 const navItems: NavItem[] = navItemsProvider(currentLocale)
 ---
 

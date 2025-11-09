@@ -1,7 +1,7 @@
 ---
 import MainTitle from '@/components/MainTitle.astro'
 import PhotoLibrary from '@/icons/PhotoLibrary.astro'
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 import { getCategories } from '@/services/categories'
 import CatCard from '../CatCard.astro'
 
@@ -19,7 +19,9 @@ const categories = getCategories(currentLocale)
 	<div class='mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6'>
 		{
 			categories.map((category, index) => (
-				<div class={`${index === 0 ? 'fade-right-anim' : ''} ${index === 1 ? 'fade-up-anim' : ''} ${index === 2 ? 'fade-left-anim' : ''} ${index > 2 ? 'fade-up-anim' : ''}`}>
+				<div
+					class={`${index === 0 ? 'fade-right-anim' : ''} ${index === 1 ? 'fade-up-anim' : ''} ${index === 2 ? 'fade-left-anim' : ''} ${index > 2 ? 'fade-up-anim' : ''}`}
+				>
 					<CatCard
 						id={category.id}
 						name={category.name}

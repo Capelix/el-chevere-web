@@ -1,5 +1,5 @@
 import type { NavItem } from '@/interfaces/navItems'
-import { getI18N } from '@/languages/index.ts'
+import { getI18N } from '@/locales/index.ts'
 import type { Philosophy } from '../interfaces/philosophy'
 import Home from '@/icons/Home.astro'
 import DateIcon from '@/icons/Date.astro'
@@ -32,12 +32,12 @@ export const navItemsProvider = (currentLocale: string | undefined): NavItem[] =
 			url: '/',
 			icon: Home,
 		},
-		// {
-		// 	title: i18n.DATES,
-		// 	label: 'dates',
-		// 	url: '/schedule',
-		// 	icon: DateIcon,
-		// },
+		{
+			title: i18n.DATES,
+			label: 'dates',
+			url: '/schedule',
+			icon: DateIcon,
+		},
 		{
 			title: i18n.PORTFOLIO,
 			label: 'portfolio',

@@ -1,4 +1,4 @@
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 
 export function useConvert(currentLocale: string = 'es') {
 	const i18n = getI18N({ currentLocale })

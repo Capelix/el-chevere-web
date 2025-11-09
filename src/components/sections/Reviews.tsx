@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { getI18N } from '@/languages/index'
+import { getI18N } from '@/locales/index'
 import { FilledStar } from '@/icons/FilledStar'
 import { Loading } from '@/icons/Loading'
 import { useReviews } from '@/hooks/useReviews'
@@ -7,41 +7,14 @@ import { useAuth } from '@/hooks/useAuth'
 import { useRef } from 'preact/hooks'
 import { useState } from 'preact/hooks'
 import type { JSX } from 'preact'
-
-// Helper function to get image URL - uses proxy for external images
-const getImageUrl = (imageUrl: string): string => {
-	if (!imageUrl) return '/statics/user.svg'
-
-	// If it's already a local image, return as is
-	if (imageUrl.startsWith('/') || imageUrl.startsWith('data:')) {
-		return imageUrl
-	}
-
-	// If it's an external URL (like Google images), use proxy
-	try {
-		new URL(imageUrl) // Validate URL format
-		// Use proxy for external images to avoid CORB issues
-		return `/api/proxy-image?url=${encodeURIComponent(imageUrl)}`
-	} catch {
-		// If URL parsing fails, return fallback
-		return '/statics/user.svg'
-	}
-}
+import { ReviewCard } from '@/components/ReviewCard'
 
 export const Reviews = ({ currentLocale }: { currentLocale?: string }) => {
 	const i18n = getI18N({ currentLocale })
 	const formRef = useRef<HTMLFormElement | null>(null)
 	const [rating, setRating] = useState(0)
-	const {
-		allReviews,
-		reviewsCount,
-		sending,
-		loading,
-		loadingMore,
-		reviewsShowing,
-		sendReview,
-		loadMoreReviews,
-	} = useReviews()
+	const { allReviews, reviewsCount, sending, loading, loadingMore, sendReview, loadMoreReviews } =
+		useReviews()
 	const { user, loading: authLoading } = useAuth()
 
 	const handleSubmit = async (event: JSX.TargetedEvent<HTMLFormElement, Event>) => {
@@ -94,84 +67,84 @@ export const Reviews = ({ currentLocale }: { currentLocale?: string }) => {
 			{!authLoading && user && (
 				<div className='rounded-2xl border border-accent/10 bg-glass p-6 shadow-lg backdrop-blur-md'>
 					<form className='flex flex-col gap-4' ref={formRef} onSubmit={handleSubmit}>
-					<label className='inline-flex flex-col gap-2'>
-						<span className='text-sm font-semibold text-primary'>Title*</span>
-						<input
-							required
-							className='h-12 rounded-xl border border-accent/20 bg-back/50 px-4 text-primary outline-none transition-all duration-300 placeholder:text-secondary/50 focus:border-accent/60 focus:bg-back/70 focus:ring-2 focus:ring-accent/20'
-							type='text'
-							name='review_title'
-							placeholder='Title'
-							maxLength={40}
-						/>
-					</label>
+						<label className='inline-flex flex-col gap-2'>
+							<span className='text-sm font-semibold text-primary'>{i18n.TITLE}*</span>
+							<input
+								required
+								className='h-12 rounded-xl border border-accent/20 bg-back/50 px-4 text-primary outline-none transition-all duration-300 placeholder:text-secondary/50 focus:border-accent/60 focus:bg-back/70 focus:ring-2 focus:ring-accent/20'
+								type='text'
+								name='review_title'
+								placeholder={i18n.TITLE}
+								maxLength={40}
+							/>
+						</label>
 
-					<label className='inline-flex flex-col gap-2'>
-						<span className='text-sm font-semibold text-primary'>{i18n.MESSAGE}*</span>
-						<textarea
-							required
-							className='min-h-28 resize-none rounded-xl border border-accent/20 bg-back/50 p-4 text-primary outline-none transition-all duration-300 placeholder:text-secondary/50 focus:border-accent/60 focus:bg-back/70 focus:ring-2 focus:ring-accent/20'
-							name='review_message'
-							placeholder={i18n.MESSAGE_PLACEHOLDER}
-						></textarea>
-					</label>
+						<label className='inline-flex flex-col gap-2'>
+							<span className='text-sm font-semibold text-primary'>{i18n.MESSAGE}*</span>
+							<textarea
+								required
+								className='min-h-28 resize-none rounded-xl border border-accent/20 bg-back/50 p-4 text-primary outline-none transition-all duration-300 placeholder:text-secondary/50 focus:border-accent/60 focus:bg-back/70 focus:ring-2 focus:ring-accent/20'
+								name='review_message'
+								placeholder={i18n.MESSAGE_PLACEHOLDER}
+							></textarea>
+						</label>
 
-					<div className='inline-flex flex-col gap-2'>
-						<span className='text-sm font-semibold text-primary'>{i18n.RATING}*</span>
-						<div className='flex items-center gap-1'>
-							{[1, 2, 3, 4, 5].map((star) => (
-								<FilledStar
-									key={star}
-									onClick={() => handleRatingClick(star)}
-									classes={`size-6 transition-all duration-300 cursor-pointer hover:scale-110 ${
-										rating >= star
-											? 'text-warning drop-shadow-lg'
-											: 'text-secondary/40 hover:text-warning/60'
-									}`}
-								/>
-							))}
+						<div className='inline-flex flex-col gap-2'>
+							<span className='text-sm font-semibold text-primary'>{i18n.RATING}*</span>
+							<div className='flex items-center gap-1'>
+								{[1, 2, 3, 4, 5].map((star) => (
+									<FilledStar
+										key={star}
+										onClick={() => handleRatingClick(star)}
+										classes={`size-6 transition-all duration-300 cursor-pointer hover:scale-110 ${
+											rating >= star
+												? 'text-warning drop-shadow-lg'
+												: 'text-secondary/40 hover:text-warning/60'
+										}`}
+									/>
+								))}
+							</div>
 						</div>
-					</div>
 
-					<button
-						type='submit'
-						disabled={sending}
-						className={`group relative mt-2 flex w-full max-w-xs flex-row items-center justify-center gap-2 overflow-hidden rounded-xl border px-6 py-3 text-lg font-bold transition-all duration-300 ${
-							!sending
-								? 'cursor-pointer border-accent/30 bg-gradient-to-r from-main to-accent text-primary shadow-lg shadow-accent/20 hover:scale-105 hover:border-accent/60 hover:shadow-xl hover:shadow-accent/30 active:scale-95'
-								: 'cursor-not-allowed border-accent/10 bg-back/50 text-secondary'
-						}`}
-					>
-						<span
-							className={`absolute inset-0 bg-gradient-to-r from-accent to-main opacity-0 transition-opacity duration-300 ${
-								sending ? '' : 'group-hover:opacity-100'
+						<button
+							type='submit'
+							disabled={sending}
+							className={`group relative mt-2 flex w-full max-w-xs flex-row items-center justify-center gap-2 overflow-hidden rounded-xl border px-6 py-3 text-lg font-bold transition-all duration-300 ${
+								!sending
+									? 'cursor-pointer border-accent/30 bg-gradient-to-r from-main to-accent text-primary shadow-lg shadow-accent/20 hover:scale-105 hover:border-accent/60 hover:shadow-xl hover:shadow-accent/30 active:scale-95'
+									: 'cursor-not-allowed border-accent/10 bg-back/50 text-secondary'
 							}`}
-						></span>
+						>
+							<span
+								className={`absolute inset-0 bg-gradient-to-r from-accent to-main opacity-0 transition-opacity duration-300 ${
+									sending ? '' : 'group-hover:opacity-100'
+								}`}
+							></span>
 
-						<span className='relative z-10 flex items-center gap-2'>
-							{!sending ? (
-								<svg
-									className='size-5'
-									width='800px'
-									height='800px'
-									viewBox='0 0 24 24'
-									fill='none'
-									stroke='currentColor'
-									strokeWidth='2'
-									strokeLinecap='round'
-									strokeLinejoin='round'
-								>
-									<path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
-									<path d='M10 14l11 -11'></path>
-									<path d='M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5'></path>
-								</svg>
-							) : (
-								<Loading classes='size-5' />
-							)}
-							{`${!sending ? i18n.SEND : i18n.SENDING}`}
-						</span>
-					</button>
-				</form>
+							<span className='relative z-10 flex items-center gap-2'>
+								{!sending ? (
+									<svg
+										className='size-5'
+										width='800px'
+										height='800px'
+										viewBox='0 0 24 24'
+										fill='none'
+										stroke='currentColor'
+										strokeWidth='2'
+										strokeLinecap='round'
+										strokeLinejoin='round'
+									>
+										<path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
+										<path d='M10 14l11 -11'></path>
+										<path d='M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5'></path>
+									</svg>
+								) : (
+									<Loading classes='size-5' />
+								)}
+								{`${!sending ? i18n.SEND : i18n.SENDING}`}
+							</span>
+						</button>
+					</form>
 				</div>
 			)}
 
@@ -187,50 +160,7 @@ export const Reviews = ({ currentLocale }: { currentLocale?: string }) => {
 
 				{allReviews.length > 0 &&
 					!loading &&
-					allReviews.map((review) => (
-						<article
-							key={review.id}
-							className='group flex flex-col gap-3 rounded-2xl border border-accent/10 bg-glass p-6 shadow-lg backdrop-blur-md transition-all duration-300 hover:border-accent/20 hover:shadow-xl hover:shadow-accent/10'
-						>
-							<div className='flex items-center gap-4'>
-								<img
-									className='size-12 rounded-full border-2 border-accent/20 object-cover transition-all duration-300 group-hover:scale-105 group-hover:border-accent/40'
-									src={getImageUrl(review.image)}
-									alt={review.username}
-									loading='lazy'
-									decoding='async'
-									onError={(e) => {
-										const target = e.target as HTMLImageElement
-										// Fallback to default user icon if image fails to load
-										if (!target.src.includes('/statics/user.svg')) {
-											target.src = '/statics/user.svg'
-											target.onerror = null // Prevent infinite loop
-										}
-									}}
-								/>
-								<div className='flex-1'>
-									<p className='font-semibold text-primary'>{review.username}</p>
-									<div className='mt-1 flex items-center gap-1'>
-										{[1, 2, 3, 4, 5].map((star) => (
-											<FilledStar
-												key={star}
-												classes={`size-4 ${
-													review.rating >= star
-														? 'text-warning drop-shadow-md'
-														: 'text-secondary/30'
-												}`}
-											/>
-										))}
-										<h3 className='ml-2 text-base font-semibold text-primary'>{review.title}</h3>
-									</div>
-								</div>
-							</div>
-
-							<p className='text-base leading-relaxed text-secondary'>
-								&quot;{review.description}&quot;
-							</p>
-						</article>
-					))}
+					allReviews.map((review) => <ReviewCard key={review.id} review={review} />)}
 			</div>
 
 			{allReviews.length < reviewsCount && (

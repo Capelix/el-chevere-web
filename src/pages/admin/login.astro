@@ -3,8 +3,8 @@ import MainTitle from '@/components/MainTitle.astro'
 import SectionContainer from '@/components/SectionContainer.astro'
 import { LoginForm } from '@/components/sections/LoginForm'
 import { Login as LoginIcon } from '@/icons/Login'
-import { getI18N } from '@/languages/index'
 import Layout from '@/layouts/Layout.astro'
+import { getI18N } from '@/locales/index'
 
 const currentLocale = Astro.currentLocale
 const i18N = getI18N({ currentLocale })
@@ -16,9 +16,9 @@ const i18N = getI18N({ currentLocale })
 	canonical='https://fotoestudioelchevere.com/login'
 >
 	<SectionContainer>
-		<div class='flex w-full max-w-4xl flex-col md:w-11/12 lg:w-8/12'>
+		<div class='flex w-full max-w-6xl flex-col md:w-11/12 lg:w-10/12'>
 			<MainTitle>
-				<LoginIcon classes='size-8' />
+				<LoginIcon classes='size-8 text-accent' />
 				{i18N.LOGIN}
 			</MainTitle>
 
